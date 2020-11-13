@@ -1,0 +1,83 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+repositories {
+    mavenCentral()
+}
+
+subprojects {
+    configurations {
+        [apiElements, runtimeElements].each {
+            it.outgoing.artifacts.removeIf { it.buildDependencies.getDependencies(null).contains(jar) }
+            it.outgoing.artifact(bootJar)
+        }
+    }
+
+    group = 'com.g2.examinationservice'
+    String appVersion = '1.0.'
+
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    //apply plugin: 'org.springframework.boot'
+    apply plugin: 'java-library'
+    apply plugin: "maven-publish"
+
+    ext {
+        set('springCloudVersion', "Hoxton.SR8")
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+    ext {
+        set('springCloudVersion', "Hoxton.SR8")
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                version = appVersion+System.getenv("RUN_NUMBER")
+                url = uri("https://maven.pkg.github.com/simonblund/soa-g2-examination-service")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+        publications {
+            gpr(MavenPublication) {
+                from(components.java)
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+            }
+
+        }
+    }
+}
+bootJar {
+    enabled = false
+}
+

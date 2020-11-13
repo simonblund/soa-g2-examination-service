@@ -1,0 +1,50 @@
+name: Docker
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: soa-g2-examination-service
+  IMAGE_ID: simonblund/soa-g2-examination-service
+  VERSION: ${{ github.run_number }}
+
+jobs:
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push:
+    # Ensure test job passes before pushing image.
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build Gradle project
+        run: ./docker_build.sh
+
+      - name: Build Docker image
+        run: docker build . -t examination-service
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+      - name: Naming, versioning and pushing image
+        run: |
+          echo IMAGE_ID=${{env.IMAGE_ID}}
+          echo VERSION=${{env.VERSION}}
+          docker tag 'examination-service':'latest' ${{env.IMAGE_ID}}:${{env.VERSION}}
+          docker push ${{env.IMAGE_ID}}:${{env.VERSION}}
+         

@@ -1,0 +1,41 @@
+plugins {
+    id 'org.springframework.boot'
+    id 'groovy'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.2.32'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    api project(':api')
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    //testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    //    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    //}
+    //testCompile platform("org.spockframework:spock-bom:2.0-M4-groovy-3.0")
+    //testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/org.spockframework/spock-core
+    //testCompile group: 'org.spockframework', name: 'spock-core', version: '2.0-M4-groovy-3.0'
+
+    // https://mvnrepository.com/artifact/org.spockframework/spock-spring
+    testCompile group: 'org.spockframework', name: 'spock-spring', version: '2.0-M4-groovy-2.5'
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}

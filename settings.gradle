@@ -1,0 +1,4 @@
+rootProject.name = 'examination-service'
+include 'api'
+include 'service'
+

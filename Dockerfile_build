@@ -1,0 +1,47 @@
+FROM gradle:6.7.0-jdk11
+# gradle:6.7.0-jdk11 is gradle@sha256:33f85a6c2d3fd5f81987f66db3a3e379e562587e20b5ae404d8c4f7f62f37fb3
+
+ARG UNAME=gradle
+ARG UID=1000
+ARG GID=1000
+
+# We cant do this because the group may exist
+#RUN groupadd -g $GID -o $UNAME
+#RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
+
+# Since the user and group 'gradle' exists we modify their GID and UID to match the host system's
+RUN groupmod -g $GID $UNAME
+RUN usermod -o -u $UID -g $GID $UNAME
+
+# Deliberately add cache dir before volume mounting or anything else can get there first.
+RUN mkdir /home/gradle/caches
+RUN mkdir /home/gradle/my_artifacts
+RUN chown -R $UID:$GID /home/gradle
+
+# The problem now is that some things needed are owned by another UID
+# Solution 1: change the whole freakin filesystem permissions. (may as well run as root... not going to try this)
+#RUN find / -uid 800 -exec chown -v -h 900 '{}' \;
+#RUN find / -gid 700 -exec chgrp -v 600 '{}' \;
+# Solution 2: (seemed to have no effect)
+#ARG GRADLE_USER_HOME=/home/gradle
+# Solution 3:
+# add the -g /home/gradle flag to gradle command in build execution command in build_gradle.sh
+# Solution 4:
+# run the gradle process as root user (not good), and then deal with the permissions of created artifacts later.
+# Solution 5:
+# enter the container as root, then chown the relevant (or simply everything) volumes, before changing user
+# to the non-root user (the UID an GID of this non-root user is the same as that of the user running docker on host,
+# which was ensured during the build of this image) and then running the gradle build process. I think we have it.
+
+# Set active user
+# We cant do this because the entrypoint.sh has to be run as root and then we change user to
+# the non-root user there before building the Gradle project.
+#USER $UNAME:$UNAME
+WORKDIR /home/gradle
+
+# Copy in entire project (of course this respects .dockerignore)
+COPY --chown=gradle:gradle ./ ./
+COPY ./entrypoint.sh ./entrypoint.sh
+
+ENTRYPOINT ["/bin/sh", "entrypoint.sh"]
+#CMD ["gradle -g /home/gradle build"] # see note in entrypoint.sh if using this.

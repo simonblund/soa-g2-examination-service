@@ -1,0 +1,123 @@
+# This is a dockerignore file for this build context.
+# Please be aware of the fact that the Dockerfile_build and Dockerfile (run) may need different contexts.
+
+# Ignore everything
+**
+
+
+# Allow certain files and directories
+!./build/my_artifacts
+!./service
+!./api
+!./build.gradle
+!./settings.gradle
+!entrypoint.sh
+
+
+# Allow the extracted jar paths - DISABLED
+#!./build/dependencies!./build/snapshot-dependencies!./build/spring-boot-loader!./build/resources!./build/application
+
+
+#!./build
+#!requirements.txt
+#!./server.sh
+
+#!/src/**
+# Allowed build as that has the jar for Spring app.
+
+
+# Ignore unnecessary files inside allowed directories
+# This should go after the allowed directories
+#**/*~
+#**/*.log
+
+
+# Ignore git and repo specifics
+.git
+.gitignore
+README.md
+LICENCE
+
+
+# Environment variables
+.env
+.env_private
+
+# Docker and Docker-compose
+docker-compose.yml
+Dockerfile
+
+
+
+## Suggestion for python projects
+.travis.yaml
+.openapi-generator-ignore
+README.md
+tox.ini
+git_push.sh
+test-requirements.txt
+setup.py
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/
+venv/
+.python-version
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+#Ipython Notebook
+.ipynb_checkpoints
