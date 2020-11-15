@@ -30,6 +30,9 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url 'https://repo.repsy.io/mvn/simonblund/default'
+        }
     }
 
     test {
