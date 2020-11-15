@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-public class StudentController implements StudentResource{
+public class ExaminationController implements StudentResource{
 
     @Override
     @GetMapping(UrlPaths.STUDENT_RESOURCE)
