@@ -1,20 +1,27 @@
 package com.g2.examinationservice.domain;
 
-import com.g2.examinationservice.api.rest.Grade;
-import lombok.Builder;
+import com.g2.examinationservice.api.rest.submission.Grade;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@Builder
+@Entity
 public class Submission {
-    UUID submissionId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long submissionId;
+
+    @ManyToOne
+    @JoinColumn(name = "examination_id")
     Examination examination;
+
     String studentId;
     String teacherId;
+
     Grade grade;
     boolean verified;
 

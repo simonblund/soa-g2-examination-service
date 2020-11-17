@@ -1,18 +1,25 @@
 package com.g2.examinationservice.domain;
 
-import com.g2.examinationservice.api.rest.StudentResponse;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 
+/*
+This class belongs in the fictional course service and is only here to provide some logical illusions.
+ */
 @Data
 @NoArgsConstructor
-@Builder
+@Entity
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long courseId;
     String name;
-    String code;
+    String courseCode;
+
+    @OneToMany(mappedBy = "course")
     List<Examination> examinations;
-    List<StudentResponse> students;
+
 }
