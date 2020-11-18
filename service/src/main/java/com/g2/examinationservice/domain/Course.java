@@ -15,11 +15,11 @@ This class belongs in the fictional course service and is only here to provide s
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long courseId;
-    String name;
-    String courseCode;
+    private long courseId;
+    private String name;
+    private String courseCode;
 
     @OneToMany(mappedBy = "course")
-    List<Examination> examinations;
+    private List<Examination> examinations;
 
 }

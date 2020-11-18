@@ -1,6 +1,9 @@
 package com.g2.examinationservice.application.impl;
 
+import com.g2.examinationservice.api.rest.examination.ExaminationRequest;
+import com.g2.examinationservice.api.rest.examination.ExaminationResponse;
 import com.g2.examinationservice.application.ExaminationService;
+import com.g2.examinationservice.domain.DomainObjectMapper;
 import com.g2.examinationservice.domain.Examination;
 import com.g2.examinationservice.infrastructure.db.ExaminationRepository;
 
@@ -17,8 +20,9 @@ public class ExaminationServiceImpl implements ExaminationService {
     }
 
     @Override
-    public Examination save(Examination exam) {
-        return null;
+    public Examination save(ExaminationRequest exam) {
+        repository.save(Examination.builder()
+                .course())
     }
 
     @Override

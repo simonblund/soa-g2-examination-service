@@ -3,6 +3,7 @@ package com.g2.examinationservice.domain;
 
 import com.g2.examinationservice.api.rest.examination.ExaminationStatus;
 import com.g2.examinationservice.api.rest.examination.ExaminationType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,27 +14,28 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
+@Builder
 public class Examination {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long examinationId;
 
-    String moduleCode;
+    private String moduleCode;
 
     @ManyToOne
     @JoinColumn(name="course_id")
-    Course course;
+    private Course course;
 
     @OneToMany(mappedBy = "examination")
-    List<Submission> submissions;
+    private List<Submission> submissions;
 
-    String teacherId;
-    ExaminationType type;
-    ExaminationStatus status;
-    Instant startTime;
-    Instant endTime;
-    String location;
-    String description;
+    private String teacherId;
+    private ExaminationType type;
+    private ExaminationStatus status;
+    private Instant startTime;
+    private Instant endTime;
+    private String location;
+    private String description;
 
 }
