@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ExaminationService {
     List<Examination> getAll();
-    Examination save(ExaminationRequest exam);
+    Examination create(ExaminationRequest exam);
     Examination getExamination(String examinationCode);
     Examination getExaminationsFromCourse(String courseCode);
 }

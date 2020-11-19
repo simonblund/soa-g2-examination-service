@@ -27,7 +27,8 @@ public class ExaminationController{
         try {
             val examinations = service.getAll()
                     .stream()
-                    .map(it-> DomainObjectMapper.toExaminationResponse(it)).collect(Collectors.toList());
+                    .map(it-> DomainObjectMapper.toExaminationResponse(it))
+                    .collect(Collectors.toList());
 
             return ResponseEntity.ok(ExaminationCollectionResponse.builder().examinations(examinations).build());
         }catch (Exception e){
@@ -38,7 +39,7 @@ public class ExaminationController{
     @PostMapping(UrlPaths.EXAMINATION_RESOURCE)
     public ResponseEntity<Response> create(ExaminationRequest request){
         try {
-            val examination = service.save(request);
+            val examination = service.create(request);
 
             return ResponseEntity.status(200).build();
         }catch (Exception e){

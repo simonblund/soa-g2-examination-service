@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ExaminationRepository extends CrudRepository<Examination, Long> {
+    Examination findByModuleCode(String moduleCode);
 }

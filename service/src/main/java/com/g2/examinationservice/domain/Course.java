@@ -1,5 +1,7 @@
 package com.g2.examinationservice.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import java.util.List;
 /*
 This class belongs in the fictional course service and is only here to provide some logical illusions.
  */
+@AllArgsConstructor
+@Builder
 @Data
 @NoArgsConstructor
 @Entity
