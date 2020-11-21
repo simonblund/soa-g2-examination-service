@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -19,16 +20,16 @@ public class Submission {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long submissionId;
+    private String submissionId;
 
     @ManyToOne
     @JoinColumn(name = "examination_id")
     private Examination examination;
+    private String moduleCode;
 
     private String studentId;
     private String teacherId;
-    private Instant createdAt;
+    private LocalDate createdAt;
 
     private Grade grade;
     private boolean verified;

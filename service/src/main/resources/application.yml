@@ -12,3 +12,6 @@ integration:
   services:
     mock-service:
       url: http://localhost:8282
+    student-service:
+      url: http://localhost:8083
+  db-enabled: false

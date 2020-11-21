@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -16,13 +17,14 @@ import java.time.Instant;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class SubmissionResponse {
-    long submissionId;
-    ExaminationResponse examination;
+    private String submissionId;
+    private ExaminationResponse examination;
 
-    String studentId;
-    String teacherId;
-    Instant createdAt;
+    private String studentId;
+    private String teacherId;
+    private LocalDate createdAt;
+    private String moduleCode;
 
-    Grade grade;
-    boolean verified;
+    private Grade grade;
+    private boolean verified;
 }

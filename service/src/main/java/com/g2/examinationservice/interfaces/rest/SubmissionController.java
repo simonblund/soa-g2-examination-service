@@ -3,6 +3,8 @@ package com.g2.examinationservice.interfaces.rest;
 import com.g2.examinationservice.api.rest.UrlPaths;
 import com.g2.examinationservice.api.rest.submission.SubmissionCollectionResponse;
 import com.g2.examinationservice.api.rest.submission.SubmissionRequest;
+import com.g2.examinationservice.api.rest.submission.SubmissionResponse;
+import com.g2.examinationservice.api.rest.submission.SubmissionVerificationRequest;
 import com.g2.examinationservice.application.SubmissionService;
 import com.g2.examinationservice.domain.DomainObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class SubmissionController {
-    private SubmissionService service;
+    private final SubmissionService service;
 
     @GetMapping(UrlPaths.SUBMISSION_RESOURCE)
     public ResponseEntity<SubmissionCollectionResponse> getAll(){
@@ -39,6 +41,17 @@ public class SubmissionController {
         try {
             val submission = service.create(request);
             return ResponseEntity.status(200).build();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    @PostMapping(UrlPaths.SUBMISSION_VERIFY)
+    public ResponseEntity<SubmissionResponse> verify(SubmissionVerificationRequest request){
+
+        try {
+            val submission = service.verify(request.getSubmissionId());
+            return ResponseEntity.ok(DomainObjectMapper.toSubmissionResponse(submission));
         }catch (Exception e){
             throw e;
         }

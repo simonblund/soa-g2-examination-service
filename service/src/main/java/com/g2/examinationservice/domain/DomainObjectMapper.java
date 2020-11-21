@@ -6,7 +6,7 @@ import com.g2.examinationservice.api.rest.submission.SubmissionResponse;
 public class DomainObjectMapper {
     public static ExaminationResponse toExaminationResponse(Examination examination){
         return ExaminationResponse.builder()
-                .courseCode(examination.getCourse().getCourseCode())
+                //.courseCode(examination.getCourse().getCourseCode())
                 .moduleCode(examination.getModuleCode())
                 .description(examination.getDescription())
                 .startTime(examination.getStartTime())
@@ -23,7 +23,7 @@ public class DomainObjectMapper {
     public static SubmissionResponse toSubmissionResponse(Submission submission){
         return SubmissionResponse.builder()
                 .submissionId(submission.getSubmissionId())
-                .examination(toExaminationResponse(submission.getExamination()))
+                .moduleCode(submission.getModuleCode())
                 .studentId(submission.getStudentId())
                 .teacherId(submission.getTeacherId())
                 .grade(submission.getGrade())

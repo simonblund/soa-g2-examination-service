@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     //OWN DEPENDENCIES
-    implementation 'com.g2.studentservice:api:1.0.90'
+    implementation 'com.g2.studentservice:api:1.0.99'
 
     //NOT OWN
     implementation 'org.springframework.boot:spring-boot-starter'

@@ -10,6 +10,8 @@ public class UrlPaths {
 
     public static final String SUBMISSION_RESOURCE = BASE_URI + V1 + "/submission";
     public static final String SUBMISSION = SUBMISSION_RESOURCE + "/{submissionId}";
+    public static final String SUBMISSION_VERIFY = SUBMISSION + "/verify";
 
+    public static final String COURSE_RESOURCE = BASE_URI + V1 + "/course";
 }
 

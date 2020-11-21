@@ -1,11 +1,14 @@
 package com.g2.examinationservice.application.impl;
 
 import com.g2.examinationservice.api.rest.examination.ExaminationRequest;
+import com.g2.examinationservice.api.rest.examination.ExaminationStatus;
 import com.g2.examinationservice.application.CourseService;
 import com.g2.examinationservice.application.ExaminationService;
 import com.g2.examinationservice.domain.Examination;
 import com.g2.examinationservice.infrastructure.db.ExaminationRepository;
+import com.g2.examinationservice.infrastructure.rest.EpokClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,13 +19,30 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ExaminationServiceImpl implements ExaminationService {
-    private ExaminationRepository repository;
-    private CourseService courseService;
+    private final ExaminationRepository repository;
+    private final CourseService courseService;
+    private final EpokClient epokClient;
+
+
+    @Value("${integration.db-enabled}")
+    private boolean isDbEnabled;
 
     @Override
     public List<Examination> getAll() {
         List<Examination> examinations = new ArrayList<Examination>();
-        repository.findAll().forEach(examinations::add);
+        if(isDbEnabled){
+            repository.findAll().forEach(examinations::add);
+        }else {
+            epokClient.getAll().getBody().forEach(it->{
+                    examinations.add(
+                            Examination.builder()
+                            .moduleCode(it.getCode())
+                            .description(it.getDescription())
+                            .status(ExaminationStatus.valueOf(it.getStatus().name()))
+                            .build()
+                    );}
+            );
+        }
         return examinations;
     }
 
