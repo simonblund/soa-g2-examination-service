@@ -138,7 +138,7 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .build();
 
 
-        ladok.setResult(submissionId, request);
+        ladok.newResult(request);
         submission.setVerified(true);
         return submission;
     }
