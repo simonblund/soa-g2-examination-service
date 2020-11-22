@@ -3,6 +3,7 @@ package com.g2.examinationservice.interfaces.rest;
 import com.g2.examinationservice.api.rest.examination.ExaminationCollectionResponse;
 import com.g2.examinationservice.api.rest.UrlPaths;
 import com.g2.examinationservice.api.rest.examination.ExaminationRequest;
+import com.g2.examinationservice.api.rest.examination.ExaminationResponse;
 import com.g2.examinationservice.application.ExaminationService;
 import com.g2.examinationservice.domain.DomainObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +36,17 @@ public class ExaminationController{
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ExaminationCollectionResponse.builder().examinations(examinations).build());
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    @GetMapping(UrlPaths.EXAMINATION_RESOURCE+"/{moduleCode}")
+    public ResponseEntity<ExaminationResponse> getOne(@PathVariable String moduleCode){
+        try {
+            val examination = DomainObjectMapper.toExaminationResponse(service.getExamination(moduleCode));
+
+            return ResponseEntity.ok(examination);
         }catch (Exception e){
             throw e;
         }

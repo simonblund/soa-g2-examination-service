@@ -8,6 +8,7 @@ import java.util.List;
 public interface SubmissionService {
     Submission create(SubmissionRequest request);
     List<Submission> getAll();
+    List<Submission> getSubmissionsForExamination(String examinationCode);
   Submission verify(String submissionId);
   Submission getOne(String submissionId);
 }

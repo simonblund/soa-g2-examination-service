@@ -33,6 +33,7 @@ public class Examination {
 
     @OneToMany(mappedBy = "examination")
     private List<Submission> submissions;
+    private String courseCode;
 
     private String teacherId;
     private ExaminationType type;

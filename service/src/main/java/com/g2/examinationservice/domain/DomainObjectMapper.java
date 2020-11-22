@@ -16,6 +16,7 @@ public class DomainObjectMapper {
                 .type(examination.getType())
                 .location(examination.getLocation())
                 .examinationId(examination.getExaminationId())
+                .courseCode(examination.getCourseCode())
                 .build();
 
     }

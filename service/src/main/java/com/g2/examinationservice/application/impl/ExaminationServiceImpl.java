@@ -8,6 +8,7 @@ import com.g2.examinationservice.domain.Examination;
 import com.g2.examinationservice.infrastructure.db.ExaminationRepository;
 import com.g2.examinationservice.infrastructure.rest.EpokClient;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,13 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public Examination getExamination(String examinationCode) {
-        return repository.findByModuleCode(examinationCode);
+        val response = epokClient.getOne(examinationCode).getBody().get(0);
+        return Examination.builder()
+                .moduleCode(response.getCode())
+                .description(response.getDescription())
+                .courseCode(response.getCourseCode())
+                .status(ExaminationStatus.valueOf(response.getStatus().name()))
+                .build();
     }
 
     @Override

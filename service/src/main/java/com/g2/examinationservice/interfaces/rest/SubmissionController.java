@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,10 +23,25 @@ import java.util.stream.Collectors;
 public class SubmissionController {
     private final SubmissionService service;
 
+
     @GetMapping(UrlPaths.SUBMISSION_RESOURCE)
     public ResponseEntity<SubmissionCollectionResponse> getAll(){
         try {
             val submissions = service.getAll()
+                    .stream()
+                    .map(it -> DomainObjectMapper.toSubmissionResponse(it))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(SubmissionCollectionResponse.builder().submissions(submissions).build());
+
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    @GetMapping(UrlPaths.SUBMISSION_RESOURCE+"/{examinationCode}")
+    public ResponseEntity<SubmissionCollectionResponse> getSubmissionsForExamination(@PathVariable String examinationCode){
+        try {
+            val submissions = service.getSubmissionsForExamination(examinationCode)
                     .stream()
                     .map(it -> DomainObjectMapper.toSubmissionResponse(it))
                     .collect(Collectors.toList());

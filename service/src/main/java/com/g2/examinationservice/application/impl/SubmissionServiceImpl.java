@@ -16,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,6 +34,9 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Value("${integration.db-enabled}")
     private boolean isDbEnabled;
+
+    @Value("${integration.mock-submission-fixed}")
+    private boolean isMockFixed;
 
     public Submission create(SubmissionRequest request) {
         if (isDbEnabled) {
@@ -71,6 +76,35 @@ public class SubmissionServiceImpl implements SubmissionService {
                         .build());
 
             });
+        }
+        return submissions;
+    }
+
+    @Override
+    public List<Submission> getSubmissionsForExamination(String examinationCode) {
+
+        List<Submission> submissions = new ArrayList<>();
+
+        if (isMockFixed) {
+            List<Submission> finalSubmissions = submissions;
+            canvas.getAssignmentsForExamination(examinationCode).getBody()
+                    .forEach(it -> {
+                        finalSubmissions.add(Submission.builder()
+                                .moduleCode(it.getModuleId())
+                                .studentId(it.getStudentId())
+                                .teacherId(it.getTeacherId())
+                                .submissionId(it.getAssignmentId())
+                                .grade(Grade.valueOf(it.getGrade().name()))
+                                .createdAt(it.getCreatedAt())
+                                .build());
+
+                    });
+            submissions = finalSubmissions;
+        } else {
+            val all = getAll();
+            submissions = all.stream().filter(it -> it.getModuleCode().contains(examinationCode)).collect(Collectors.toList());
+
+
         }
         return submissions;
     }
