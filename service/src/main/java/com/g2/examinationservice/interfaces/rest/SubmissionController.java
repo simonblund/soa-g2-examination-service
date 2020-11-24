@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.stream.Collectors;
@@ -68,7 +65,7 @@ public class SubmissionController {
     }
 
     @PostMapping(UrlPaths.SUBMISSION_VERIFY)
-    public ResponseEntity<SubmissionResponse> verify(SubmissionVerificationRequest request){
+    public ResponseEntity<SubmissionResponse> verify(@RequestBody SubmissionVerificationRequest request){
 
         log.info("Endpoint {} {}hit with POST",UrlPaths.SUBMISSION_VERIFY, request.getSubmissionId());
         try {

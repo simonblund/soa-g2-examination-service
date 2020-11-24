@@ -112,7 +112,9 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public Submission getOne(String submissionId) {
 
-        val response =canvas.getAssignment(submissionId).getBody();
+        val response =canvas.getAssignment(submissionId).getBody().get(0);
+
+
 
         return Submission.builder()
                 .moduleCode(response.getModuleId())
