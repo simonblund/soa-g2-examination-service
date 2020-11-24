@@ -8,6 +8,7 @@ import com.g2.examinationservice.api.rest.submission.SubmissionVerificationReque
 import com.g2.examinationservice.application.SubmissionService;
 import com.g2.examinationservice.domain.DomainObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.websocket.server.PathParam;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class SubmissionController {
@@ -27,6 +29,7 @@ public class SubmissionController {
     @GetMapping(UrlPaths.SUBMISSION_RESOURCE)
     public ResponseEntity<SubmissionCollectionResponse> getAll(){
         try {
+            log.info("Endpoint {} hit with GET",UrlPaths.SUBMISSION_RESOURCE);
             val submissions = service.getAll()
                     .stream()
                     .map(it -> DomainObjectMapper.toSubmissionResponse(it))
@@ -41,6 +44,7 @@ public class SubmissionController {
     @GetMapping(UrlPaths.SUBMISSION_RESOURCE+"/{examinationCode}")
     public ResponseEntity<SubmissionCollectionResponse> getSubmissionsForExamination(@PathVariable String examinationCode){
         try {
+            log.info("Endpoint {} {}hit with GET",UrlPaths.SUBMISSION_RESOURCE, examinationCode);
             val submissions = service.getSubmissionsForExamination(examinationCode)
                     .stream()
                     .map(it -> DomainObjectMapper.toSubmissionResponse(it))
@@ -66,6 +70,7 @@ public class SubmissionController {
     @PostMapping(UrlPaths.SUBMISSION_VERIFY)
     public ResponseEntity<SubmissionResponse> verify(SubmissionVerificationRequest request){
 
+        log.info("Endpoint {} {}hit with POST",UrlPaths.SUBMISSION_VERIFY, request.getSubmissionId());
         try {
             val submission = service.verify(request.getSubmissionId());
             return ResponseEntity.ok(DomainObjectMapper.toSubmissionResponse(submission));

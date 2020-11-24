@@ -30,11 +30,15 @@ public class ExaminationController{
     @GetMapping(UrlPaths.EXAMINATION_RESOURCE)
     public ResponseEntity<ExaminationCollectionResponse> getAll(){
         try {
+            log.info("Endpoint {} hit with GET",UrlPaths.EXAMINATION_RESOURCE);
             val examinations = service.getAll()
                     .stream()
                     .map(it-> DomainObjectMapper.toExaminationResponse(it))
                     .collect(Collectors.toList());
 
+            if(examinations.isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
             return ResponseEntity.ok(ExaminationCollectionResponse.builder().examinations(examinations).build());
         }catch (Exception e){
             throw e;
@@ -44,9 +48,15 @@ public class ExaminationController{
     @GetMapping(UrlPaths.EXAMINATION_RESOURCE+"/{moduleCode}")
     public ResponseEntity<ExaminationResponse> getOne(@PathVariable String moduleCode){
         try {
-            val examination = DomainObjectMapper.toExaminationResponse(service.getExamination(moduleCode));
+            log.info("Endpoint {} {}hit with GET",UrlPaths.SUBMISSION_RESOURCE, moduleCode);
+            val examination = service.getExamination(moduleCode);
+            if(examination.getModuleCode().isBlank()){
+                return ResponseEntity.notFound().build();
+            }
 
-            return ResponseEntity.ok(examination);
+            val response = DomainObjectMapper.toExaminationResponse(examination);
+
+            return ResponseEntity.ok(response);
         }catch (Exception e){
             throw e;
         }
