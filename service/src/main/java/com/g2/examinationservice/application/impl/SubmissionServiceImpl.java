@@ -74,9 +74,20 @@ public class SubmissionServiceImpl implements SubmissionService {
                         .grade(Grade.valueOf(it.getGrade().name()))
                         .createdAt(it.getCreatedAt())
                         .build());
-
             });
         }
+
+        // Check if the submissions are verified! This is a disaster for latency.
+        submissions.forEach(itAgain -> {
+            itAgain.setVerified(
+                    this.checkIfSubmissionGradeVerified(
+                        itAgain.getStudentId(),
+                        itAgain.getModuleCode(),
+                        itAgain.getGrade().toString()
+                    )
+            );
+        });
+
         return submissions;
     }
 
@@ -143,6 +154,14 @@ public class SubmissionServiceImpl implements SubmissionService {
         ladok.newResult(request);
         submission.setVerified(true);
         return submission;
+    }
+
+    public boolean checkIfSubmissionGradeVerified(String studentId, String moduleId, String grade) {
+        ladok.getResult();
+        // todo: here LadokClient does not actually implement any other get methods other
+        //   than getResult by ID. Which is made by: const id = Math.floor(Math.random() * 1000); in nodemocks.
+        //   which means remaking the module in student-service.
+        return true;
     }
 
 

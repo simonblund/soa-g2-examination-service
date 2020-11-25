@@ -70,6 +70,8 @@ public class SubmissionController {
         log.info("Endpoint {} {}hit with POST",UrlPaths.SUBMISSION_VERIFY, request.getSubmissionId());
         try {
             val submission = service.verify(request.getSubmissionId());
+            // It is not checked weather or not it is already verified.. should return
+            /// a different response code if it is already in Ladok.
             return ResponseEntity.ok(DomainObjectMapper.toSubmissionResponse(submission));
         }catch (Exception e){
             throw e;
